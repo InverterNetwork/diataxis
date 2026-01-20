@@ -89,7 +89,8 @@ echo "" >> "$REPORT_FILE"
 
 for quadrant in tutorials how-to reference explanation; do
     dir="$DOCS_DIR/$quadrant"
-    echo "### ${quadrant^}" >> "$REPORT_FILE"
+    # Use quadrant name as-is for header
+    echo "### $quadrant" >> "$REPORT_FILE"
     echo "" >> "$REPORT_FILE"
 
     if [ -d "$dir" ]; then
@@ -113,12 +114,12 @@ for quadrant in tutorials how-to reference explanation; do
                     echo "| $filename | $status | $author | $tags |" >> "$REPORT_FILE"
 
                     # Count stats
-                    [ "$status" = "draft" ] && ((draft_count++))
-                    [ "$status" = "review" ] && ((needs_review++))
-                    [[ "$author" == *"AI"* ]] && ((ai_generated++))
+                    [ "$status" = "draft" ] && ((draft_count++)) || true
+                    [ "$status" = "review" ] && ((needs_review++)) || true
+                    [[ "$author" == *"AI"* ]] && ((ai_generated++)) || true
                 else
                     echo "| $filename | ⚠️ NO FRONTMATTER | - | - |" >> "$REPORT_FILE"
-                    ((missing_frontmatter++))
+                    ((missing_frontmatter++)) || true
                     echo -e "  ${RED}⚠${NC}  Missing frontmatter: $file"
                 fi
             done
