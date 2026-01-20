@@ -66,7 +66,7 @@ Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 2. Reads source material from `refs/` (never modifies it)
 3. Creates refined docs in `docs/`
 4. Commits after processing
-5. Stops when all sources have corresponding output
+5. Stops when AI outputs `<promise>COMPLETE</promise>` (all refs/ processed)
 
 **Warning:** Runs with `--dangerously-skip-permissions`. Review commits regularly.
 

@@ -20,4 +20,8 @@ Commit and push after processing.
 
 Use .ralph/TODO.md to track current status and pending work.
 
-STOPPING CONDITION: When all files in refs/ have corresponding output in docs/, update TODO.md to mark status as "Complete" and exit.
+STOPPING CONDITION: When all files in refs/ have corresponding output in docs/ (check frontmatter `source:` fields), output exactly:
+
+<promise>COMPLETE</promise>
+
+This signals the automation to stop. Only output this tag when truly done—all refs/ files processed.

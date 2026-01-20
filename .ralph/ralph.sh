@@ -3,6 +3,7 @@ set -e
 
 LOG_FILE=".ralph/ralph.log"
 TODO_FILE=".ralph/TODO.md"
+TEMP_OUTPUT=$(mktemp)
 
 # Colors
 RED='\033[0;31m'
@@ -30,8 +31,7 @@ list_refs() {
 cleanup() {
   echo ""
   log "Stopped by user."
-  # Kill any background jobs
-  jobs -p | xargs -r kill 2>/dev/null || true
+  rm -f "$TEMP_OUTPUT" 2>/dev/null || true
   exit 0
 }
 trap cleanup INT TERM
@@ -60,54 +60,30 @@ ITERATION=0
 
 while :; do
   ITERATION=$((ITERATION + 1))
-  BEFORE_COUNT=$(count_refs)
-  
-  if [ "$BEFORE_COUNT" -eq 0 ]; then
-    echo ""
-    log "${GREEN}✓ Complete!${NC} All files processed in $ITERATION iterations."
-    exit 0
-  fi
+  REF_COUNT=$(count_refs)
   
   echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-  log "Iteration $ITERATION — ${YELLOW}$BEFORE_COUNT${NC} files remaining"
-  
-  # Start background watcher to show file processing progress
-  (
-    LAST_COUNT=$BEFORE_COUNT
-    while true; do
-      sleep 5
-      CURRENT=$(count_refs 2>/dev/null) || break
-      if [ "$CURRENT" -lt "$LAST_COUNT" ]; then
-        DIFF=$((LAST_COUNT - CURRENT))
-        echo -e "  ${GREEN}→${NC} $DIFF file(s) moved ($CURRENT remaining)"
-        echo "[$(date '+%H:%M:%S')] Progress: $DIFF file(s) moved ($CURRENT remaining)" >> "$LOG_FILE"
-        LAST_COUNT=$CURRENT
-      fi
-      [ "$CURRENT" -eq 0 ] && break
-    done
-  ) &
-  WATCHER_PID=$!
+  log "Iteration $ITERATION — ${YELLOW}$REF_COUNT${NC} ref files"
   
   log "Invoking claude..."
   
-  # Run claude and capture output
-  # Use a temp file to capture output, tee to log in real-time
+  # Run claude and capture output to temp file + log
   set +e
-  cat .ralph/prompt.md | claude -p --dangerously-skip-permissions 2>&1 | tee -a "$LOG_FILE"
+  cat .ralph/prompt.md | claude -p --dangerously-skip-permissions 2>&1 | tee "$TEMP_OUTPUT" | tee -a "$LOG_FILE"
   EXIT_CODE=${PIPESTATUS[1]}
   set -e
   
-  # Kill watcher
-  kill $WATCHER_PID 2>/dev/null || true
-  wait $WATCHER_PID 2>/dev/null || true
-  
-  # Results
-  AFTER_COUNT=$(count_refs)
-  PROCESSED=$((BEFORE_COUNT - AFTER_COUNT))
-  
   echo ""
+  
+  # Check for completion signal
+  if grep -q "<promise>COMPLETE</promise>" "$TEMP_OUTPUT"; then
+    log "${GREEN}✓ Complete!${NC} All files processed in $ITERATION iteration(s)."
+    rm -f "$TEMP_OUTPUT"
+    exit 0
+  fi
+  
   if [ "$EXIT_CODE" -eq 0 ]; then
-    log "Iteration $ITERATION complete — ${GREEN}$PROCESSED${NC} file(s) processed"
+    log "Iteration $ITERATION complete"
   else
     log "${RED}⚠${NC} Iteration $ITERATION exited with code $EXIT_CODE"
   fi
