@@ -156,7 +156,7 @@ EOF
 }
 
 reset_docs() {
-  rm -rf docs/tutorials/* docs/how-to/* docs/explanation/* 2>/dev/null || true
+  find docs/tutorials docs/how-to docs/explanation -type f ! -name '.gitkeep' -delete 2>/dev/null || true
   echo "docs/ cleared."
 }
 
