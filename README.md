@@ -61,6 +61,12 @@ Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 
 **Requires:** [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
 
+**Startup options:**
+| Prompt | Effect |
+|--------|--------|
+| `Reset TODO?` | Clears `.ralph/TODO.md` to initial state |
+| `Reset docs/?` | Removes all files in `docs/` (preserves `.gitkeep`) |
+
 **What it does:**
 1. Reads GOAL.md and rules from `.cursor/rules/diataxis.mdc`
 2. Reads source material from `refs/` (never modifies it)
