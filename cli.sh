@@ -155,11 +155,20 @@ EOF
   echo "TODO reset."
 }
 
+reset_docs() {
+  rm -rf docs/tutorials/* docs/how-to/* docs/explanation/* 2>/dev/null || true
+  echo "docs/ cleared."
+}
+
 run_ralph() {
   echo ""
-  read -p "Reset TODO? [y/N]: " reset_choice
-  if [[ "$reset_choice" == "y" || "$reset_choice" == "Y" ]]; then
+  read -p "Reset TODO? [y/N]: " reset_todo_choice
+  if [[ "$reset_todo_choice" == "y" || "$reset_todo_choice" == "Y" ]]; then
     reset_todo
+  fi
+  read -p "Reset docs/? [y/N]: " reset_docs_choice
+  if [[ "$reset_docs_choice" == "y" || "$reset_docs_choice" == "Y" ]]; then
+    reset_docs
   fi
   echo ""
   # Pass through to ralph.sh which handles its own output and signals
