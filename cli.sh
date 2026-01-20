@@ -68,10 +68,8 @@ run_claude() {
 
 run_ralph() {
   echo ""
-  echo "Starting Ralph (autonomous mode)..."
-  echo "Press Ctrl+C to stop"
-  echo "─────────────────────────────────────────"
-  .ralph/ralph.sh
+  # Pass through to ralph.sh which handles its own output and signals
+  exec .ralph/ralph.sh
 }
 
 run_cursor() {
