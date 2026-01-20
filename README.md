@@ -1,101 +1,94 @@
-# Diátaxis Documentation Framework
+# Diátaxis Docs Engine
 
-AI-assisted documentation organization using the [Diátaxis framework](https://diataxis.fr/).
-
-## How It Works
+AI-powered documentation engine. Dump raw docs, get organized output.
 
 ```
-┌─────────────────┐         ┌─────────────────┐
-│     refs/       │   AI    │     docs/       │
-│  (dump here)    │ ──────> │  (organized)    │
-│                 │         │                 │
-│ - raw docs      │         │ - tutorials/    │
-│ - notes         │         │ - how-to/       │
-│ - exports       │         │ - reference/    │
-│ - any format    │         │ - explanation/  │
-└─────────────────┘         └─────────────────┘
+refs/  ──AI──>  docs/
+(dump)          ├── tutorials/
+                ├── how-to/
+                ├── reference/
+                └── explanation/
 ```
 
-1. **Dump** raw documentation into `refs/`
-2. **Ask AI** to analyze and categorize
-3. **Review** proposed organization
-4. **AI refines** content for each quadrant
+## Quick Start
 
-## Directory Structure
+```bash
+# 1. Dump your docs
+cp ~/my-project/docs/* refs/
 
+# 2. Run the CLI
+./cli.sh
 ```
-diataxis/
-├── refs/               # INPUT: Raw docs, any structure
-├── docs/
-│   ├── tutorials/      # Learning-oriented
-│   ├── how-to/         # Task-oriented
-│   ├── reference/      # Information-oriented
-│   └── explanation/    # Understanding-oriented
-├── .cursor/rules       # Agent rules (canonical)
-└── .claude/rules       # Points to cursor rules
-```
+
+Select your tool:
+| Option | Description |
+|--------|-------------|
+| `claude` | Interactive processing via Claude Code CLI |
+| `cursor` | Opens Cursor IDE with command ready |
+| `ralph` | Autonomous mode (runs until done) |
+
+## Commands
+
+| Command | What it does |
+|---------|--------------|
+| `analyze refs` | Scan and propose categorization |
+| `process refs` | Full workflow: analyze → refine → organize |
+| `categorize [file]` | Classify a specific file |
+| `refine [file] as [type]` | Transform for target quadrant |
+| `what's missing` | Identify documentation gaps |
 
 ## The Four Quadrants
 
-|  | Tutorials | How-to | Reference | Explanation |
-|--|-----------|--------|-----------|-------------|
-| **Oriented to** | Learning | Tasks | Information | Understanding |
-| **Purpose** | Teach beginners | Solve problems | Describe facts | Explain context |
-| **Form** | Lessons | Steps | Specs/tables | Discussion |
-| **Analogy** | Cooking class | Recipe | Encyclopedia | Food history |
+| Quadrant | Purpose | Form | Ask yourself |
+|----------|---------|------|--------------|
+| `tutorials/` | Teach beginners | Lessons | Teaching a newcomer? |
+| `how-to/` | Solve problems | Steps | Solving a specific task? |
+| `reference/` | Describe facts | Specs/tables | Documenting technical details? |
+| `explanation/` | Explain context | Discussion | Explaining why/background? |
 
-### Quick Classification
+## Ralph Mode (Optional)
 
-Ask yourself:
-- Teaching a newcomer? → `tutorials/`
-- Solving a specific problem? → `how-to/`
-- Describing technical facts? → `reference/`
-- Explaining why/context? → `explanation/`
+Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 
-## Usage
-
-### Dump Your Docs
-
-Put anything in `refs/`:
 ```bash
-cp ~/my-project/docs/* refs/
-cp ~/notes/architecture.md refs/
-# PDFs, markdown, text - anything
+# Via CLI
+./cli.sh  # Select "ralph"
+
+# Or directly
+.ralph/ralph.sh
 ```
 
-### Ask AI to Process
+**Requires:** [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
+
+**What it does:**
+1. Reads rules from `.cursor/rules/diataxis.mdc`
+2. Processes each file in `refs/`
+3. Commits after each file
+4. Stops when `refs/` is empty
+
+**Warning:** Runs with `--dangerously-skip-permissions`. Review commits regularly.
+
+---
+
+## Reference
+
+### Directory Structure
 
 ```
-"analyze refs"
+├── refs/                 # INPUT: dump raw docs here
+├── docs/
+│   ├── tutorials/        # Learning-oriented
+│   ├── how-to/           # Task-oriented
+│   ├── reference/        # Information-oriented
+│   └── explanation/      # Understanding-oriented
+├── .ralph/               # Autonomous mode scripts
+├── .cursor/rules/        # Agent rules (canonical)
+└── .claude/rules         # Points to cursor rules
 ```
-AI scans `refs/`, reports contents, proposes categorization.
 
-```
-"process refs"
-```
-Full workflow: analyze → categorize → refine → organize.
+### Document Frontmatter
 
-```
-"what's missing"
-```
-Identify gaps in documentation coverage.
-
-### Review & Approve
-
-AI will propose where each piece goes. Review before it moves/transforms content.
-
-## Agent Rules
-
-Both Cursor and Claude Code use the same ruleset:
-
-- **Canonical rules**: `.cursor/rules`
-- **Claude pointer**: `.claude/rules` (reads from cursor)
-
-This ensures consistent behavior regardless of which AI assistant you use.
-
-## Frontmatter
-
-All refined docs include:
+All processed docs include:
 
 ```yaml
 ---
@@ -109,7 +102,11 @@ tags: [relevant, tags]
 ---
 ```
 
+### Agent Rules
+
+Both Cursor and Claude Code share the same ruleset at `.cursor/rules/diataxis.mdc`.
+
 ## Resources
 
-- [Diátaxis Official Site](https://diataxis.fr/)
-- [Diátaxis in 5 Minutes](https://diataxis.fr/start-here/)
+- [Diátaxis Framework](https://diataxis.fr/)
+- [Ralph / Geoff Huntley](https://ghuntley.com/ralph/)
