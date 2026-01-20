@@ -33,21 +33,31 @@ docs/           → REFINED OUTPUT
 **tutorials/** - Learning-oriented
 - Hands-on lessons, step-by-step, ensure success
 - List prerequisites explicitly, provide checkpoints
+- Deliver visible results early and often
+- Minimize surprises, omit distracting options
 - Naming: `{number}-{topic}.md`
 
 **how-to/** - Task-oriented
 - Goal-focused, assumes basics known
-- Link prerequisites if needed, don't teach them
+- Written from user's perspective, not the machinery's
+- Address real-world complexity (edge cases, caveats)
+- Omit unnecessary theory—link to explanation instead
+- Title must reflect the task: "How to deploy to production"
 - Naming: `how-to-{action}-{subject}.md`
 
 **reference/** - Information-oriented
-- Technical specs, structured for lookup, no opinions
-- No prerequisites section needed
+- Describe and only describe—neutral, precise, no opinions
+- Mirror the structure of the machinery (modules, classes, commands)
+- Austere: meant for lookup, not reading cover-to-cover
+- Provide examples to illustrate, not teach
 - Naming: match code structure
 
 **explanation/** - Understanding-oriented
-- Context, rationale, trade-offs
-- For readers seeking deeper understanding
+- Answers "why" questions: design decisions, trade-offs, history
+- Opinion and perspective allowed
+- Connects topics, provides broader context
+- Avoid drift—stay bounded, don't slide into how-to or reference
+- Comes after tutorials/how-to in learning journey
 - Naming: `{concept}.md`
 
 ## Tutorial Language
@@ -64,6 +74,34 @@ Use first-person plural to establish tutor-learner relationship:
 | "You have built..." | Celebrate completion |
 
 **Minimal explanation:** Link to `explanation/` docs for "why" questions.
+
+## Reference Language
+
+Use austere, factual statements:
+
+| Pattern | Example |
+|---------|---------|
+| List available options | "Sub-commands are: init, build, deploy, clean." |
+| State requirements | "X must be initialized before calling Y." |
+| Declare constraints | "You must use A; you may not use B unless C." |
+| Describe behavior | "Returns null if the key does not exist." |
+| Warn about limits | "Maximum payload size: 1MB." |
+
+**No opinions, no instructions.** If explanation needed, link out.
+
+## How-to Language
+
+Use direct, goal-oriented imperatives:
+
+| Pattern | Example |
+|---------|---------|
+| State the goal upfront | "This guide shows how to deploy to production." |
+| Use conditional steps | "If using Docker, run X. Otherwise, run Y." |
+| Keep steps atomic | "Run the migration. Verify the output. Restart the service." |
+| Acknowledge variants | "For Windows, use Z instead." |
+| End with verification | "Confirm success by checking the dashboard." |
+
+**No teaching, no theory.** Link to tutorials for learning, reference for details.
 
 ## Distinguishing Quadrants
 
