@@ -20,6 +20,47 @@ print_header() {
   echo ""
 }
 
+check_goal() {
+  if [ -f "GOAL.md" ]; then
+    # Check if GOAL.md has user content (more than just the template)
+    content=$(grep -v '^#\|^>\|^<\|^$\|^--' GOAL.md 2>/dev/null | tr -d '[:space:]')
+    if [ -z "$content" ]; then
+      echo "┌───────────────────────────────────────────────────┐"
+      echo "│  GOAL.md needs your input!                        │"
+      echo "│                                                   │"
+      echo "│  What's the GOAL? What output do you need?        │"
+      echo "│  Example: \"Build API docs for the auth module.\"  │"
+      echo "└───────────────────────────────────────────────────┘"
+      echo ""
+      read -p "Edit GOAL.md now? [Y/n]: " edit_choice
+      if [[ "$edit_choice" != "n" && "$edit_choice" != "N" ]]; then
+        ${EDITOR:-nano} GOAL.md
+        echo ""
+      fi
+    else
+      echo "Goal: $(head -n 20 GOAL.md | grep -v '^#\|^>\|^<\|^--' | tr '\n' ' ' | cut -c1-60)..."
+      echo ""
+      read -p "Edit GOAL.md? [y/N]: " edit_choice
+      if [[ "$edit_choice" == "y" || "$edit_choice" == "Y" ]]; then
+        ${EDITOR:-nano} GOAL.md
+        echo ""
+      fi
+    fi
+  else
+    echo "GOAL.md not found. Creating it..."
+    cat > GOAL.md << 'EOF'
+# Goal
+
+> **For humans only.** The AI reads this but never modifies it.
+
+<!-- What is the GOAL of this documentation? What output do you need? -->
+
+EOF
+    ${EDITOR:-nano} GOAL.md
+    echo ""
+  fi
+}
+
 select_service() {
   echo "Select service:"
   echo ""
@@ -92,6 +133,7 @@ run_cursor() {
 
 # Main
 print_header
+check_goal
 select_service
 
 if [[ "$SERVICE" == "ralph" ]]; then

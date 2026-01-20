@@ -16,9 +16,11 @@ refs/  ──AI──>  docs/
 # 1. Dump your docs
 cp ~/my-project/docs/* refs/
 
-# 2. Run the CLI
+# 2. Run the CLI (prompts you to set your goal)
 ./cli.sh
 ```
+
+The CLI prompts you to edit `GOAL.md` first—tell the AI what output you need.
 
 Select your tool:
 | Option | Description |
@@ -75,6 +77,7 @@ Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 ### Directory Structure
 
 ```
+├── GOAL.md               # YOUR goal (AI reads, never modifies)
 ├── refs/                 # INPUT: dump raw docs here
 ├── docs/
 │   ├── tutorials/        # Learning-oriented
@@ -85,6 +88,20 @@ Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 ├── .cursor/rules/        # Agent rules (canonical)
 └── .claude/rules         # Points to cursor rules
 ```
+
+### GOAL.md
+
+Tell the AI your **goal**—what output do you need?
+
+```markdown
+# Examples:
+"Build API reference for our Python SDK. Focus on the auth module first."
+"Create onboarding tutorials for new developers joining the team."
+"Document the deployment pipeline so DevOps can hand off."
+"Explain our architecture decisions for the upcoming audit."
+```
+
+The CLI prompts you to edit this on startup. The AI reads it but **never modifies it**.
 
 ### Document Frontmatter
 

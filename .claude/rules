@@ -1,10 +1,13 @@
 # Claude Code Rules
 
-Read and follow the rules in `.cursor/rules/diataxis.mdc` - that file is the canonical ruleset.
+**FIRST:** Read `GOAL.md` for user's goal and priorities (never modify it).
+
+Then follow the rules in `.cursor/rules/diataxis.mdc` - the canonical ruleset.
 
 ## Quick Reference
 
 This is a Diátaxis documentation framework repo:
+- `GOAL.md` = user's goal (read-only for AI)
 - `refs/` = raw input (dump docs here)
 - `docs/` = refined output (organized by quadrant)
 
