@@ -14,7 +14,7 @@ For each source file in refs/:
 1. Check if already processed (exists in docs/ with matching source in frontmatter)
 2. If not processed: analyze, classify, refine per the rules
 3. Create new file in appropriate docs/ subdirectory
-4. Add frontmatter with `source: refs/filename.md` to track origin
+4. Add frontmatter with `source: refs/original-filename` to track origin
 
 Commit and push after processing.
 

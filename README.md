@@ -113,7 +113,7 @@ type: tutorial | how-to | reference | explanation
 status: draft | review | published
 created: 2025-01-20
 updated: 2025-01-20
-source: refs/original-file.md
+source: refs/original-file.ext
 tags: [relevant, tags]
 ---
 ```

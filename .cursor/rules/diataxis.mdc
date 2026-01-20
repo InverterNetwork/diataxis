@@ -92,8 +92,8 @@ When docs need technical details, link to the source material:
 
 | Instead of | Do this |
 |------------|---------|
-| Copying API specs into docs | Link: "See `refs/api.md` for parameters" |
-| Duplicating config options | Link: "Full options in `refs/config.md`" |
+| Copying API specs into docs | Link: "See `refs/api.sol` for parameters" |
+| Duplicating config options | Link: "Full options in `refs/config.json`" |
 | Repeating technical details | Link: "Details in `refs/`" |
 
 **refs/ is the reference.** Don't recreate it—link to it.
@@ -173,7 +173,7 @@ type: tutorial | how-to | reference | explanation
 status: draft | review | published
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-source: refs/original-filename.md
+source: refs/original-filename.ext
 tags: [tag1, tag2]
 ---
 ```
