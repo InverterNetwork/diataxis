@@ -1,194 +1,115 @@
 # Diátaxis Documentation Framework
 
-A structured approach to organizing protocol documentation using the [Diátaxis framework](https://diataxis.fr/).
+AI-assisted documentation organization using the [Diátaxis framework](https://diataxis.fr/).
 
-## Why Diátaxis?
-
-Documentation fails when it mixes different types of content. Diátaxis solves this by recognizing four distinct documentation needs:
+## How It Works
 
 ```
-                     PRACTICAL
-                        │
-         Tutorials      │      How-to Guides
-         (Learning)     │      (Goals)
-                        │
-   STUDY ───────────────┼─────────────── WORK
-                        │
-         Explanation    │      Reference
-         (Understanding)│      (Information)
-                        │
-                   THEORETICAL
+┌─────────────────┐         ┌─────────────────┐
+│     refs/       │   AI    │     docs/       │
+│  (dump here)    │ ──────> │  (organized)    │
+│                 │         │                 │
+│ - raw docs      │         │ - tutorials/    │
+│ - notes         │         │ - how-to/       │
+│ - exports       │         │ - reference/    │
+│ - any format    │         │ - explanation/  │
+└─────────────────┘         └─────────────────┘
 ```
+
+1. **Dump** raw documentation into `refs/`
+2. **Ask AI** to analyze and categorize
+3. **Review** proposed organization
+4. **AI refines** content for each quadrant
 
 ## Directory Structure
 
 ```
 diataxis/
+├── refs/               # INPUT: Raw docs, any structure
 ├── docs/
-│   ├── tutorials/      # Learning-oriented lessons
-│   ├── how-to/         # Task-oriented guides
-│   ├── reference/      # Technical descriptions
-│   └── explanation/    # Conceptual discussions
-├── scripts/
-│   └── analyze-docs.sh # Documentation analysis pipeline
-├── .cursor/
-│   └── rules           # AI assistant rules for docs
-└── README.md
+│   ├── tutorials/      # Learning-oriented
+│   ├── how-to/         # Task-oriented
+│   ├── reference/      # Information-oriented
+│   └── explanation/    # Understanding-oriented
+├── .cursor/rules       # Agent rules (canonical)
+└── .claude/rules       # Points to cursor rules
 ```
 
 ## The Four Quadrants
 
-### 1. Tutorials (`docs/tutorials/`)
+|  | Tutorials | How-to | Reference | Explanation |
+|--|-----------|--------|-----------|-------------|
+| **Oriented to** | Learning | Tasks | Information | Understanding |
+| **Purpose** | Teach beginners | Solve problems | Describe facts | Explain context |
+| **Form** | Lessons | Steps | Specs/tables | Discussion |
+| **Analogy** | Cooking class | Recipe | Encyclopedia | Food history |
 
-**Purpose**: Teach newcomers through hands-on lessons
+### Quick Classification
 
-| Do | Don't |
-|----|-------|
-| Guide step-by-step | Assume prior knowledge |
-| Ensure success | Overwhelm with options |
-| Use concrete examples | Explain everything |
-| Keep them moving | Let them get stuck |
+Ask yourself:
+- Teaching a newcomer? → `tutorials/`
+- Solving a specific problem? → `how-to/`
+- Describing technical facts? → `reference/`
+- Explaining why/context? → `explanation/`
 
-**Example topics**:
-- Getting started with the protocol
-- Your first module deployment
-- Building a simple integration
+## Usage
 
-### 2. How-to Guides (`docs/how-to/`)
+### Dump Your Docs
 
-**Purpose**: Help users accomplish specific tasks
+Put anything in `refs/`:
+```bash
+cp ~/my-project/docs/* refs/
+cp ~/notes/architecture.md refs/
+# PDFs, markdown, text - anything
+```
 
-| Do | Don't |
-|----|-------|
-| Focus on the goal | Teach concepts |
-| Assume competence | Over-explain basics |
-| Be practical | Be theoretical |
-| Show the solution | Explore alternatives |
+### Ask AI to Process
 
-**Example topics**:
-- How to integrate the SDK
-- How to deploy to mainnet
-- How to handle errors
+```
+"analyze refs"
+```
+AI scans `refs/`, reports contents, proposes categorization.
 
-### 3. Reference (`docs/reference/`)
+```
+"process refs"
+```
+Full workflow: analyze → categorize → refine → organize.
 
-**Purpose**: Provide accurate technical information
+```
+"what's missing"
+```
+Identify gaps in documentation coverage.
 
-| Do | Don't |
-|----|-------|
-| Be accurate and complete | Include tutorials |
-| Structure for lookup | Add opinions |
-| Match code structure | Explain "why" |
-| Stay consistent | Mix with how-tos |
+### Review & Approve
 
-**Example topics**:
-- SDK API reference
-- Smart contract ABIs
-- GraphQL schema
-- Configuration options
+AI will propose where each piece goes. Review before it moves/transforms content.
 
-### 4. Explanation (`docs/explanation/`)
+## Agent Rules
 
-**Purpose**: Provide context and understanding
+Both Cursor and Claude Code use the same ruleset:
 
-| Do | Don't |
-|----|-------|
-| Explain "why" | Give instructions |
-| Provide context | List facts |
-| Discuss trade-offs | Be purely technical |
-| Connect concepts | Be a reference |
+- **Canonical rules**: `.cursor/rules`
+- **Claude pointer**: `.claude/rules` (reads from cursor)
 
-**Example topics**:
-- Architecture decisions
-- Design philosophy
-- How the module system works
-- Security model
+This ensures consistent behavior regardless of which AI assistant you use.
 
-## Document Template
+## Frontmatter
 
-Every document requires frontmatter:
+All refined docs include:
 
 ```yaml
 ---
-title: "Your Document Title"
+title: "Document Title"
 type: tutorial | how-to | reference | explanation
 status: draft | review | published
 created: 2025-01-20
 updated: 2025-01-20
-author: Your Name | AI
+source: refs/original-file.md
 tags: [relevant, tags]
 ---
-
-# Your Document Title
-
-Content goes here...
 ```
-
-## Analysis Pipeline
-
-Run the analysis script to check documentation health:
-
-```bash
-chmod +x scripts/analyze-docs.sh
-./scripts/analyze-docs.sh
-```
-
-This will:
-- Count documents per quadrant
-- Check for missing frontmatter
-- Identify AI-generated content needing review
-- Flag coverage gaps
-- Generate `docs-analysis-report.md`
-
-## Workflow for Analyzing Existing Docs
-
-### Step 1: Import existing documentation
-```bash
-# Copy existing docs to a staging area
-cp -r /path/to/existing/docs docs/_import/
-```
-
-### Step 2: Categorize each document
-For each document, ask:
-- Is it teaching a newcomer? → `tutorials/`
-- Is it solving a specific problem? → `how-to/`
-- Is it describing technical facts? → `reference/`
-- Is it explaining concepts/rationale? → `explanation/`
-
-### Step 3: Add frontmatter
-Add required metadata to each document.
-
-### Step 4: Run analysis
-```bash
-./scripts/analyze-docs.sh
-```
-
-### Step 5: Address gaps
-Review the report and create missing documentation.
-
-## AI-Generated Documentation
-
-This repo supports mixed AI and human-generated content:
-
-1. **Mark AI content**: Use `author: AI` in frontmatter
-2. **Review required**: AI docs must be reviewed before `status: published`
-3. **Focus review on**:
-   - Technical accuracy
-   - The "why" (AI often misses rationale)
-   - Edge cases
-   - Business context
-
-## Quick Reference
-
-| Question | Quadrant |
-|----------|----------|
-| "How do I learn this?" | Tutorial |
-| "How do I do X?" | How-to |
-| "What is X exactly?" | Reference |
-| "Why does X work this way?" | Explanation |
 
 ## Resources
 
 - [Diátaxis Official Site](https://diataxis.fr/)
 - [Diátaxis in 5 Minutes](https://diataxis.fr/start-here/)
-- [Docs as Code](https://www.writethedocs.org/guide/docs-as-code/)

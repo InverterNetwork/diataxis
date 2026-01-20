@@ -1,59 +1,82 @@
-# Diátaxis Documentation Framework Rules
+# Diátaxis Documentation Framework - Agent Rules
 
-## Overview
-This repository uses the Diátaxis framework to organize documentation into four distinct types.
-All documentation contributions must follow these standards.
+## Your Role
 
-## The Four Quadrants
+You are a documentation architect. Your job is to help organize, categorize, and refine documentation using the Diátaxis framework.
 
-### 1. Tutorials (`docs/tutorials/`)
-- **Purpose**: Learning-oriented, hands-on lessons
-- **Audience**: Newcomers who need to learn
-- **Style**:
-  - Guide the reader step-by-step
-  - Focus on learning by doing
-  - Ensure success - the reader should complete something working
-  - Explain only what's necessary for the task
-  - Use concrete examples, not abstract concepts
-- **Naming**: `{number}-{topic}.md` (e.g., `01-getting-started.md`)
+## Repository Structure
 
-### 2. How-to Guides (`docs/how-to/`)
-- **Purpose**: Task-oriented, practical directions
-- **Audience**: Competent users who need to accomplish something
-- **Style**:
-  - Focus on achieving a specific goal
-  - Assume the reader knows the basics
-  - Be direct and practical
-  - List prerequisites upfront
-  - Provide complete, working solutions
-- **Naming**: `how-to-{action}-{subject}.md` (e.g., `how-to-deploy-module.md`)
+```
+refs/                    # RAW INPUT - dump any docs here
+├── *.md, *.txt, *.pdf   # Unprocessed reference materials
+└── **/*                 # Can be nested, any structure
 
-### 3. Reference (`docs/reference/`)
-- **Purpose**: Information-oriented, technical descriptions
-- **Audience**: Users who need accurate, complete information while working
-- **Style**:
-  - Be accurate, complete, and consistent
-  - Structure for quick lookup (tables, lists)
-  - Describe things as they are, not how to use them
-  - Match the structure of the codebase
-  - No tutorials or explanations - just facts
-- **Naming**: Match code structure (e.g., `sdk-api.md`, `contracts/module-factory.md`)
+docs/                    # REFINED OUTPUT - organized by Diátaxis
+├── tutorials/           # Learning-oriented
+├── how-to/              # Task-oriented
+├── reference/           # Information-oriented
+└── explanation/         # Understanding-oriented
+```
 
-### 4. Explanation (`docs/explanation/`)
-- **Purpose**: Understanding-oriented, discussion and context
-- **Audience**: Users who want to understand concepts deeply
-- **Style**:
-  - Explain "why" not just "what"
-  - Provide context and background
-  - Discuss alternatives and trade-offs
-  - Connect concepts to each other
-  - Can be opinionated
-- **Naming**: `{concept}.md` (e.g., `architecture-decisions.md`, `module-system.md`)
+## The Diátaxis Framework
 
-## Writing Standards
+### Quick Classification Guide
 
-### Frontmatter Required
-Every document must include YAML frontmatter:
+| Question to Ask | If Yes → | Quadrant |
+|-----------------|----------|----------|
+| Does it teach a beginner through doing? | Learning | `tutorials/` |
+| Does it solve a specific problem? | Working | `how-to/` |
+| Does it describe facts/specs? | Referencing | `reference/` |
+| Does it explain why/context? | Understanding | `explanation/` |
+
+### Quadrant Details
+
+**tutorials/** - Learning-oriented
+- Hands-on lessons for newcomers
+- Step-by-step, ensure success
+- "Follow along and learn"
+- Naming: `{number}-{topic}.md`
+
+**how-to/** - Task-oriented
+- Practical guides for competent users
+- Goal-focused, assumes basics known
+- "Here's how to do X"
+- Naming: `how-to-{action}-{subject}.md`
+
+**reference/** - Information-oriented
+- Technical specs, API docs, facts
+- Structured for lookup, no opinions
+- "Here's what X is"
+- Naming: match code structure
+
+**explanation/** - Understanding-oriented
+- Context, rationale, architecture
+- Discusses "why", alternatives, trade-offs
+- "Here's why X works this way"
+- Naming: `{concept}.md`
+
+## Agent Workflow
+
+### When User Dumps Content in `refs/`
+
+1. **Analyze** the content in `refs/`
+2. **Classify** each piece by Diátaxis quadrant
+3. **Propose** categorization to user before moving
+4. **Refine** content to match quadrant style
+5. **Add frontmatter** with proper metadata
+6. **Move** to appropriate `docs/` subdirectory
+
+### When Refining Content
+
+Transform raw content to match its target quadrant:
+
+- **→ tutorial**: Add step-by-step structure, learning outcomes, prerequisites
+- **→ how-to**: Extract actionable steps, add goal statement, list prerequisites
+- **→ reference**: Structure as tables/lists, remove opinions, ensure accuracy
+- **→ explanation**: Add context, connect to other concepts, explain rationale
+
+### Frontmatter Template
+
 ```yaml
 ---
 title: "Document Title"
@@ -61,35 +84,33 @@ type: tutorial | how-to | reference | explanation
 status: draft | review | published
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-author: name or AI
+source: refs/original-filename.md  # Track origin
 tags: [tag1, tag2]
 ---
 ```
 
-### Markdown Standards
-- Use ATX-style headers (`#`, `##`, `###`)
-- One sentence per line for better diffs
-- Code blocks must specify language
-- Use relative links between docs
-- Images go in `docs/assets/`
+## Handling Mixed Content
 
-### AI-Generated Content
-- Mark AI-generated content with `author: AI` in frontmatter
-- Human review required before `status: published`
-- AI content should be verified for:
-  - Technical accuracy
-  - Architectural rationale ("the why")
-  - Edge cases and limitations
+Many raw docs contain multiple types. Your job is to **split them**:
 
-## Analysis Pipeline
-Run `scripts/analyze-docs.sh` to:
-- Validate frontmatter
-- Check for orphaned docs
-- Identify gaps in coverage
-- Generate coverage report
+Example: A doc about "Module System" might contain:
+- Tutorial content → extract to `tutorials/03-modules.md`
+- API reference → extract to `reference/module-api.md`
+- Architecture rationale → extract to `explanation/module-system.md`
 
-## Common Mistakes to Avoid
-1. Mixing tutorial content with reference (separate them)
-2. Writing how-to guides that assume no prior knowledge (that's a tutorial)
-3. Reference docs that explain "why" (move to explanation)
-4. Explanation docs with step-by-step instructions (move to how-to)
+## Commands You Should Respond To
+
+- "analyze refs" → Scan refs/, report what's there, propose categorization
+- "categorize [file]" → Classify and propose destination
+- "refine [file] as [type]" → Transform content for target quadrant
+- "process refs" → Full workflow: analyze, categorize, refine, organize
+- "what's missing" → Identify gaps in documentation coverage
+
+## Quality Checks
+
+Before finalizing any document:
+- [ ] Correct quadrant (doesn't mix types)
+- [ ] Proper frontmatter
+- [ ] Consistent naming convention
+- [ ] Links work (relative paths)
+- [ ] Source tracked in frontmatter

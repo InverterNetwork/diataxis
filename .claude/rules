@@ -1,0 +1,27 @@
+# Claude Code Rules
+
+This project uses a shared ruleset. Read and follow the rules defined in:
+
+→ `.cursor/rules`
+
+That file contains the canonical agent instructions for this repository.
+
+## Quick Context
+
+This is a Diátaxis documentation framework repo:
+- `refs/` = raw input (dump docs here)
+- `docs/` = refined output (organized by quadrant)
+
+Your job: analyze, categorize, refine, and organize documentation.
+
+## Before Any Documentation Task
+
+1. Read `.cursor/rules` for full framework details
+2. Understand the four quadrants (tutorials, how-to, reference, explanation)
+3. Follow the agent workflow defined there
+
+## Key Commands
+
+- "analyze refs" → scan and propose categorization
+- "process refs" → full workflow
+- "what's missing" → identify gaps
