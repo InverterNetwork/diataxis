@@ -10,6 +10,15 @@ This is a Diátaxis documentation framework repo:
 
 Your job: analyze, categorize, refine, and organize documentation.
 
+## Writing Style
+
+**Docs must be short, scannable, and information-dense.**
+
+- Lead with the point, cut filler
+- Bullets/tables over prose
+- Active voice, precise words
+- Every sentence earns its place
+
 ## Commands
 
 - `analyze refs` → scan and propose categorization

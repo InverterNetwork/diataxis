@@ -92,6 +92,40 @@ Split documents containing multiple types:
 - `process refs` → Full workflow
 - `what's missing` → Identify coverage gaps
 
+## Writing Style
+
+**Core principle: Respect the reader's time.**
+
+Every sentence must earn its place. Team members need to absorb information quickly.
+
+| Do | Don't |
+|----|-------|
+| Lead with the point | Bury it in context |
+| Use short sentences | Write compound sentences with multiple clauses |
+| Choose precise words | Use vague modifiers (very, really, quite) |
+| Active voice | Passive voice |
+| Concrete examples | Abstract explanations |
+
+**Formatting for scannability:**
+- Bold key terms on first use
+- Use bullet points over paragraphs when listing
+- Tables for comparisons/specs
+- Code blocks for anything executable
+- One idea per paragraph
+
+**Trimming rules:**
+- Cut "In order to" → "To"
+- Cut "It is important to note that" → delete
+- Cut "Please" and "kindly" → command directly
+- Cut "This document explains" → just explain
+- Cut adverbs unless they change meaning
+
+**Information density targets:**
+- Tutorials: ~150 words per concept/step
+- How-to: ~50-100 words per step
+- Reference: Minimal prose, maximize structured data
+- Explanation: Concise paragraphs, no repetition
+
 ## Quality Checks
 
 - [ ] Correct quadrant (no mixed types)
@@ -99,3 +133,6 @@ Split documents containing multiple types:
 - [ ] Consistent naming
 - [ ] Working relative links
 - [ ] Source tracked
+- [ ] No filler phrases
+- [ ] Scannable structure (headers, bullets, tables)
+- [ ] Information density appropriate for quadrant
