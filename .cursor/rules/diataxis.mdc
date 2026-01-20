@@ -32,19 +32,70 @@ docs/           → REFINED OUTPUT
 
 **tutorials/** - Learning-oriented
 - Hands-on lessons, step-by-step, ensure success
+- List prerequisites explicitly, provide checkpoints
 - Naming: `{number}-{topic}.md`
 
 **how-to/** - Task-oriented
 - Goal-focused, assumes basics known
+- Link prerequisites if needed, don't teach them
 - Naming: `how-to-{action}-{subject}.md`
 
 **reference/** - Information-oriented
 - Technical specs, structured for lookup, no opinions
+- No prerequisites section needed
 - Naming: match code structure
 
 **explanation/** - Understanding-oriented
 - Context, rationale, trade-offs
+- For readers seeking deeper understanding
 - Naming: `{concept}.md`
+
+## Tutorial Language
+
+Use first-person plural to establish tutor-learner relationship:
+
+| Pattern | Purpose |
+|---------|---------|
+| "In this tutorial, we will..." | Set expectations |
+| "First, do x. Now, do y." | Clear sequencing |
+| "The output should look like..." | Set expectations |
+| "Notice that... Remember that..." | Orient the learner |
+| "Let's check..." | Confirm progress |
+| "You have built..." | Celebrate completion |
+
+**Minimal explanation:** Link to `explanation/` docs for "why" questions.
+
+## Distinguishing Quadrants
+
+**Tutorial vs How-to:**
+- Tutorial: Teaches a beginner through learning | "We will learn X"
+- How-to: Solves a problem for a practitioner | "How to achieve X"
+- Tutorial: Fixed sequence, must follow steps | How-to: Flexible, skip what you know
+- Tutorial: Ensures success | How-to: Assumes competence
+
+**Reference vs Explanation:**
+- Reference: Describes the machinery (facts)
+- Explanation: Explains the machinery (reasoning)
+- Reference: "API accepts X parameter" | Explanation: "We chose X because..."
+
+## The Compass
+
+Use this 2D map for classification:
+
+```
+           PRACTICAL
+              │
+  HOW-TO ─────┼───── TUTORIAL
+              │
+ REFERENCE ───┼─── EXPLANATION
+              │
+           THEORETICAL
+              
+  WORKING ◄───┴───► LEARNING
+```
+
+- Top: Practical (doing) | Bottom: Theoretical (understanding)
+- Left: Working (applying) | Right: Learning (acquiring)
 
 ## Workflow
 
@@ -83,6 +134,17 @@ Split documents containing multiple types:
 - Tutorial content → `tutorials/`
 - API reference → `reference/`
 - Architecture rationale → `explanation/`
+
+## Cross-linking
+
+Link between quadrants to serve different needs:
+
+| From | Link to | When |
+|------|---------|------|
+| Tutorial | Explanation | "Why" questions arise |
+| Tutorial | Reference | Technical details needed |
+| How-to | Reference | Exact syntax/parameters |
+| Explanation | Reference | Concrete specifications |
 
 ## Commands
 
@@ -126,8 +188,44 @@ Every sentence must earn its place. Team members need to absorb information quic
 - Reference: Minimal prose, maximize structured data
 - Explanation: Concise paragraphs, no repetition
 
+## Document Size Constraints
+
+**Hard limits (prevent AI bloat):**
+
+| Quadrant | Target | Max | Split if exceeds |
+|----------|--------|-----|------------------|
+| Tutorial | 1000-2000 words | 3000 words | Break into parts |
+| How-to | 300-800 words | 1500 words | Separate variants |
+| Reference | Per-entry: 50-200 words | 500 words/entry | Split into sub-entries |
+| Explanation | 500-1500 words | 2500 words | Multiple focused docs |
+
+**The 7-item rule:**
+- Lists/navigation with >7 items → group into sub-sections
+- TOCs with >7 entries → add hierarchy
+- Exception: alphabetical/numbered lists (natural order aids scanning)
+
+**Splitting triggers:**
+- Tutorial takes >30 min → multi-part series
+- How-to has multiple "if X, do Y" branches → base case + variants
+- Reference entry covers multiple distinct things → one entry per thing
+- Explanation wanders into multiple topics → one doc per concept
+
+**Anti-bloat rules (AI-specific):**
+- NEVER pad with context the reader already knows
+- NEVER repeat information available via cross-link
+- NEVER add "background" sections unless essential
+- NEVER generate placeholder content ("more details coming soon")
+- Prefer tables/lists over prose paragraphs
+- One pass to write, one pass to cut 30%
+
+**Goldilocks test:**
+- Too short: Reader left with unanswered questions
+- Too long: Reader skims or abandons
+- Just right: Reader gets exactly what they need, nothing more
+
 ## Quality Checks
 
+**Functional quality:**
 - [ ] Correct quadrant (no mixed types)
 - [ ] Proper frontmatter
 - [ ] Consistent naming
@@ -136,3 +234,10 @@ Every sentence must earn its place. Team members need to absorb information quic
 - [ ] No filler phrases
 - [ ] Scannable structure (headers, bullets, tables)
 - [ ] Information density appropriate for quadrant
+- [ ] Within size limits (see Document Size Constraints)
+- [ ] Lists ≤7 items or grouped
+
+**Deep quality (subjective but essential):**
+- [ ] Has flow (reads smoothly)
+- [ ] Anticipates the user (answers next questions)
+- [ ] Fits human needs (right level of detail)
