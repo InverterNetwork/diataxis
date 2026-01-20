@@ -136,7 +136,31 @@ run_claude() {
   echo "$COMMAND" | claude
 }
 
+reset_todo() {
+  cat > .ralph/TODO.md << 'EOF'
+# Ralph Agent Status
+
+## Current Status
+
+Idle - waiting for documents in refs/
+
+## Processed Files
+
+_None yet_
+
+## Pending
+
+_Check refs/ for new documents_
+EOF
+  echo "TODO reset."
+}
+
 run_ralph() {
+  echo ""
+  read -p "Reset TODO? [y/N]: " reset_choice
+  if [[ "$reset_choice" == "y" || "$reset_choice" == "Y" ]]; then
+    reset_todo
+  fi
   echo ""
   # Pass through to ralph.sh which handles its own output and signals
   exec .ralph/ralph.sh
