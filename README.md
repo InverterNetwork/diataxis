@@ -1,19 +1,18 @@
 # Diátaxis Docs Engine
 
-AI-powered documentation engine. Dump raw docs, get organized output.
+AI-powered documentation engine. Add source material, get organized output.
 
 ```
-refs/  ──AI──>  docs/
-(dump)          ├── tutorials/
-                ├── how-to/
-                ├── reference/
-                └── explanation/
+refs/  ──AI reads──>  docs/
+(your reference,      ├── tutorials/
+ never modified)      ├── how-to/
+                      └── explanation/
 ```
 
 ## Quick Start
 
 ```bash
-# 1. Dump your docs
+# 1. Add your source material (these stay forever, AI never touches them)
 cp ~/my-project/docs/* refs/
 
 # 2. Run the CLI (prompts you to set your goal)
@@ -39,14 +38,14 @@ Select your tool:
 | `refine [file] as [type]` | Transform for target quadrant |
 | `what's missing` | Identify documentation gaps |
 
-## The Four Quadrants
+## The Quadrants
 
-| Quadrant | Purpose | Form | Ask yourself |
-|----------|---------|------|--------------|
-| `tutorials/` | Teach beginners | Lessons | Teaching a newcomer? |
-| `how-to/` | Solve problems | Steps | Solving a specific task? |
-| `reference/` | Describe facts | Specs/tables | Documenting technical details? |
-| `explanation/` | Explain context | Discussion | Explaining why/background? |
+| Location | Purpose | Form |
+|----------|---------|------|
+| `refs/` | Reference material | Specs/tables (your source, already there) |
+| `docs/tutorials/` | Teach beginners | Lessons |
+| `docs/how-to/` | Solve problems | Steps |
+| `docs/explanation/` | Explain context | Discussion |
 
 ## Ralph Mode (Optional)
 
@@ -63,10 +62,11 @@ Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 **Requires:** [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
 
 **What it does:**
-1. Reads rules from `.cursor/rules/diataxis.mdc`
-2. Processes each file in `refs/`
-3. Commits after each file
-4. Stops when `refs/` is empty
+1. Reads GOAL.md and rules from `.cursor/rules/diataxis.mdc`
+2. Reads source material from `refs/` (never modifies it)
+3. Creates refined docs in `docs/`
+4. Commits after processing
+5. Stops when all sources have corresponding output
 
 **Warning:** Runs with `--dangerously-skip-permissions`. Review commits regularly.
 
@@ -78,11 +78,10 @@ Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 
 ```
 ├── GOAL.md               # YOUR goal (AI reads, never modifies)
-├── refs/                 # INPUT: dump raw docs here
-├── docs/
+├── refs/                 # REFERENCE: your source material (AI reads, never modifies)
+├── docs/                 # OUTPUT: AI creates here
 │   ├── tutorials/        # Learning-oriented
 │   ├── how-to/           # Task-oriented
-│   ├── reference/        # Information-oriented
 │   └── explanation/      # Understanding-oriented
 ├── .ralph/               # Autonomous mode scripts
 ├── .cursor/rules/        # Agent rules (canonical)

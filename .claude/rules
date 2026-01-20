@@ -8,10 +8,13 @@ Then follow the rules in `.cursor/rules/diataxis.mdc` - the canonical ruleset.
 
 This is a Diátaxis documentation framework repo:
 - `GOAL.md` = user's goal (read-only for AI)
-- `refs/` = raw input (dump docs here)
-- `docs/` = refined output (organized by quadrant)
+- `refs/` = reference material (read-only for AI, user-owned)
+- `docs/` = output: tutorials, how-to, explanation (AI creates here)
 
-Your job: analyze, categorize, refine, and organize documentation.
+**CRITICAL:** 
+- Never modify, delete, or move files in `refs/`
+- refs/ IS the reference documentation—don't recreate it, link to it
+- Only create tutorials, how-tos, and explanations in `docs/`
 
 ## Writing Style
 

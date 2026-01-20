@@ -6,18 +6,18 @@ FIRST: Read and internalize:
 
 If GOAL.md has content, apply it. It overrides default rules.
 
-Your job is to process documentation from refs/ into docs/.
+Your job is to process source material from refs/ into docs/.
 
-For each unprocessed file in refs/:
-1. Analyze content type (tutorial, how-to, reference, explanation)
-2. Refine to match quadrant style per the rules
-3. Apply writing style guidelines (concise, scannable, no filler)
-4. Add proper frontmatter with source tracking
-5. Move to appropriate docs/ subdirectory
-6. Delete the original from refs/ (or move to refs/.processed/)
+**CRITICAL: refs/ is READ-ONLY.** Never delete, move, or modify files in refs/. Only create files in docs/.
 
-Commit and push after every file processed.
+For each source file in refs/:
+1. Check if already processed (exists in docs/ with matching source in frontmatter)
+2. If not processed: analyze, classify, refine per the rules
+3. Create new file in appropriate docs/ subdirectory
+4. Add frontmatter with `source: refs/filename.md` to track origin
+
+Commit and push after processing.
 
 Use .ralph/TODO.md to track current status and pending work.
 
-STOPPING CONDITION: When refs/ contains no unprocessed files (only .gitkeep or .processed/), update TODO.md to mark status as "Complete" and exit. Do not loop indefinitely - when done, you're done.
+STOPPING CONDITION: When all files in refs/ have corresponding output in docs/, update TODO.md to mark status as "Complete" and exit.

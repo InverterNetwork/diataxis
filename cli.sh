@@ -32,31 +32,60 @@ check_goal() {
       echo "│  Example: \"Build API docs for the auth module.\"  │"
       echo "└───────────────────────────────────────────────────┘"
       echo ""
-      read -p "Edit GOAL.md now? [Y/n]: " edit_choice
-      if [[ "$edit_choice" != "n" && "$edit_choice" != "N" ]]; then
-        ${EDITOR:-nano} GOAL.md
+      read -e -p "Enter your goal: " goal_input
+      if [ -n "$goal_input" ]; then
+        cat > GOAL.md << EOF
+# Goal
+
+> **For humans only.** The AI reads this but never modifies it.
+
+$goal_input
+EOF
         echo ""
+        echo "Goal saved."
       fi
-    else
-      echo "Goal: $(head -n 20 GOAL.md | grep -v '^#\|^>\|^<\|^--' | tr '\n' ' ' | cut -c1-60)..."
       echo ""
-      read -p "Edit GOAL.md? [y/N]: " edit_choice
+    else
+      current_goal=$(head -n 20 GOAL.md | grep -v '^#\|^>\|^<\|^--' | tr '\n' ' ' | sed 's/^[[:space:]]*//' | cut -c1-60)
+      echo "Goal: $current_goal..."
+      echo ""
+      read -p "Change goal? [y/N]: " edit_choice
       if [[ "$edit_choice" == "y" || "$edit_choice" == "Y" ]]; then
-        ${EDITOR:-nano} GOAL.md
+        read -e -p "Enter new goal: " goal_input
+        if [ -n "$goal_input" ]; then
+          cat > GOAL.md << EOF
+# Goal
+
+> **For humans only.** The AI reads this but never modifies it.
+
+$goal_input
+EOF
+          echo "Goal updated."
+        fi
         echo ""
       fi
     fi
   else
     echo "GOAL.md not found. Creating it..."
-    cat > GOAL.md << 'EOF'
+    echo ""
+    read -e -p "Enter your goal: " goal_input
+    if [ -n "$goal_input" ]; then
+      cat > GOAL.md << EOF
 # Goal
 
 > **For humans only.** The AI reads this but never modifies it.
 
-<!-- What is the GOAL of this documentation? What output do you need? -->
+$goal_input
+EOF
+      echo "Goal saved."
+    else
+      cat > GOAL.md << 'EOF'
+# Goal
+
+> **For humans only.** The AI reads this but never modifies it.
 
 EOF
-    ${EDITOR:-nano} GOAL.md
+    fi
     echo ""
   fi
 }
