@@ -2,7 +2,6 @@
 set -e
 
 # Diátaxis Docs Engine CLI
-# Interactive launcher for documentation processing
 
 COMMANDS=(
   "analyze refs"
@@ -22,7 +21,6 @@ print_header() {
 
 check_goal() {
   if [ -f "GOAL.md" ]; then
-    # Check if GOAL.md has user content (more than just the template)
     content=$(grep -v '^#\|^>\|^<\|^$\|^--' GOAL.md 2>/dev/null | tr -d '[:space:]')
     if [ -z "$content" ]; then
       echo "┌───────────────────────────────────────────────────┐"
@@ -49,21 +47,6 @@ EOF
       current_goal=$(head -n 20 GOAL.md | grep -v '^#\|^>\|^<\|^--' | tr '\n' ' ' | sed 's/^[[:space:]]*//' | cut -c1-60)
       echo "Goal: $current_goal..."
       echo ""
-      read -p "Change goal? [y/N]: " edit_choice
-      if [[ "$edit_choice" == "y" || "$edit_choice" == "Y" ]]; then
-        read -e -p "Enter new goal: " goal_input
-        if [ -n "$goal_input" ]; then
-          cat > GOAL.md << EOF
-# Goal
-
-> **For humans only.** The AI reads this but never modifies it.
-
-$goal_input
-EOF
-          echo "Goal updated."
-        fi
-        echo ""
-      fi
     fi
   else
     echo "GOAL.md not found. Creating it..."
@@ -94,7 +77,7 @@ select_service() {
   echo "Select service:"
   echo ""
   echo "  1) claude  - Claude Code CLI (interactive)"
-  echo "  2) ralph   - Autonomous mode (runs until done)"
+  echo "  2) ralph   - Autonomous mode (cralph loop)"
   echo "  3) cursor  - Open in Cursor IDE"
   echo ""
   read -p "Enter choice [1-3]: " choice
@@ -136,43 +119,13 @@ run_claude() {
   echo "$COMMAND" | claude
 }
 
-reset_todo() {
-  cat > .ralph/TODO.md << 'EOF'
-# Ralph Agent Status
-
-## Current Status
-
-Idle - waiting for documents in refs/
-
-## Processed Files
-
-_None yet_
-
-## Pending
-
-_Check refs/ for new documents_
-EOF
-  echo "TODO reset."
-}
-
-reset_docs() {
-  find docs/tutorials docs/how-to docs/explanation -type f ! -name '.gitkeep' -delete 2>/dev/null || true
-  echo "docs/ cleared."
-}
-
 run_ralph() {
   echo ""
-  read -p "Reset TODO? [y/N]: " reset_todo_choice
-  if [[ "$reset_todo_choice" == "y" || "$reset_todo_choice" == "Y" ]]; then
-    reset_todo
+  if ! command -v cralph &> /dev/null; then
+    echo "cralph not found. Install with: bun add -g cralph"
+    exit 1
   fi
-  read -p "Reset docs/? [y/N]: " reset_docs_choice
-  if [[ "$reset_docs_choice" == "y" || "$reset_docs_choice" == "Y" ]]; then
-    reset_docs
-  fi
-  echo ""
-  # Pass through to ralph.sh which handles its own output and signals
-  exec .ralph/ralph.sh
+  exec cralph
 }
 
 run_cursor() {
@@ -183,7 +136,6 @@ run_cursor() {
   echo ""
   echo "Paste into Cursor chat (Cmd+V / Ctrl+V)"
   
-  # Try to open Cursor
   if command -v cursor &> /dev/null; then
     cursor .
   elif [ -d "/Applications/Cursor.app" ]; then

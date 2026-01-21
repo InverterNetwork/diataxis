@@ -12,21 +12,20 @@ refs/  ──AI reads──>  docs/
 ## Quick Start
 
 ```bash
-# 1. Add your source material (these stay forever, AI never touches them)
+# 1. Add your source material (never modified by AI)
 cp ~/my-project/docs/* refs/
 
-# 2. Run the CLI (prompts you to set your goal)
+# 2. Run the CLI
 ./cli.sh
 ```
 
-The CLI prompts you to edit `GOAL.md` first—tell the AI what output you need.
+The CLI prompts you to set your goal, then select a service:
 
-Select your tool:
 | Option | Description |
 |--------|-------------|
 | `claude` | Interactive processing via Claude Code CLI |
+| `ralph` | Autonomous mode (cralph loop) |
 | `cursor` | Opens Cursor IDE with command ready |
-| `ralph` | Autonomous mode (runs until done) |
 
 ## Commands
 
@@ -47,34 +46,32 @@ Select your tool:
 | `docs/how-to/` | Solve problems | Steps |
 | `docs/explanation/` | Explain context | Discussion |
 
-## Ralph Mode (Optional)
+## Ralph Mode
 
-Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
+Autonomous processing via [cralph](https://github.com/mguleryuz/cralph) (Claude in a loop).
 
 ```bash
 # Via CLI
 ./cli.sh  # Select "ralph"
 
 # Or directly
-.ralph/ralph.sh
+cralph
 ```
 
-**Requires:** [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
+**Requires:** [Bun](https://bun.sh) + [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
 
-**Startup options:**
-| Prompt | Effect |
-|--------|--------|
-| `Reset TODO?` | Clears `.ralph/TODO.md` to initial state |
-| `Reset docs/?` | Removes all files in `docs/` (preserves `.gitkeep`) |
+```bash
+bun add -g cralph
+```
 
 **What it does:**
-1. Reads GOAL.md and rules from `.cursor/rules/diataxis.mdc`
+1. Reads `GOAL.md` and rules from `.ralph/rule.md`
 2. Reads source material from `refs/` (never modifies it)
 3. Creates refined docs in `docs/`
-4. Commits after processing
-5. Stops when AI outputs `<promise>COMPLETE</promise>` (all refs/ processed)
+4. Updates `.ralph/TODO.md` with progress
+5. Stops when AI outputs `<promise>COMPLETE</promise>`
 
-**Warning:** Runs with `--dangerously-skip-permissions`. Review commits regularly.
+**Warning:** Runs with `--dangerously-skip-permissions`. Review output regularly.
 
 ---
 
@@ -83,13 +80,17 @@ Autonomous processing via [Claude Code in a loop](https://ghuntley.com/ralph/).
 ### Directory Structure
 
 ```
+├── cli.sh                # Interactive launcher
 ├── GOAL.md               # YOUR goal (AI reads, never modifies)
 ├── refs/                 # REFERENCE: your source material (AI reads, never modifies)
 ├── docs/                 # OUTPUT: AI creates here
 │   ├── tutorials/        # Learning-oriented
 │   ├── how-to/           # Task-oriented
 │   └── explanation/      # Understanding-oriented
-├── .ralph/               # Autonomous mode scripts
+├── .ralph/               # cralph config
+│   ├── paths.json        # References, rule, output paths
+│   ├── rule.md           # Agent instructions
+│   └── TODO.md           # Task tracking (updated by AI)
 ├── .cursor/rules/        # Agent rules (canonical)
 └── .claude/rules         # Points to cursor rules
 ```
@@ -106,7 +107,7 @@ Tell the AI your **goal**—what output do you need?
 "Explain our architecture decisions for the upcoming audit."
 ```
 
-The CLI prompts you to edit this on startup. The AI reads it but **never modifies it**.
+Edit this before running. The AI reads it but **never modifies it**.
 
 ### Document Frontmatter
 
@@ -126,9 +127,11 @@ tags: [relevant, tags]
 
 ### Agent Rules
 
-Both Cursor and Claude Code share the same ruleset at `.cursor/rules/diataxis.mdc`.
+- **Cursor/Claude:** `.cursor/rules/diataxis.mdc` (full framework rules)
+- **cralph:** `.ralph/rule.md` (loop-specific instructions)
 
 ## Resources
 
 - [Diátaxis Framework](https://diataxis.fr/)
-- [Ralph / Geoff Huntley](https://ghuntley.com/ralph/)
+- [cralph](https://github.com/mguleryuz/cralph) - Claude in a loop CLI
+- [Ralph / Geoff Huntley](https://ghuntley.com/ralph/) - The technique
